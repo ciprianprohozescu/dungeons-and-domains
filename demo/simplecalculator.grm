@@ -1,0 +1,75 @@
+!--- About----------------------------------------------------------------------
+
+"Name"    = 'simplecalculator'
+"Author"  = 'Milosz A. Krajewski'
+"About"   = 'Simple Calculator Demo Grammar'
+"Version" = '1.0'
+
+"Case Sensitive" = True
+"Start Symbol" = <opt_meat>
+
+!--- Sets ----------------------------------------------------------------------
+
+{up128}   = [#128-#255]
+{quot}    = ['"']
+{squot}   = ['']
+{slash}   = ['\']
+{bslash}  = ['/']
+{aster}   = ['*']
+{hash}    = ['#']
+{under}   = ['_']
+
+{anychar} = {Printable} + {up128}
+{anychar_no_quot} = {anychar} - {quot}
+{anychar_no_squot} = {anychar} - {squot}
+{anychar_no_aster} = {anychar} - {aster}
+{anychar_no_bslash} = {anychar} - {bslash}
+{hexdigit} = {digit} + [abcdefABCDEF]
+{everything} = {anychar} + {CR} + {LF} + {Whitespace}
+{everything_no_quot} = {everything} - {quot}
+{everything_no_squot} = {everything} - {squot}
+{everything_no_aster} = {everything} - {aster}
+{everything_no_bslash} = {everything} - {bslash}
+
+!--- Terminals -----------------------------------------------------------------
+
+number = (({digit}+(.{digit}+)?)|(.{digit}+))([Ee][+-]?{digit}+)?
+identifier = {under}*{Letter}({under}|{AlphaNumeric})*
+
+!--- Basic rules ---------------------------------------------------------------
+
+<opt_meat> ::= <meat_item>
+<opt_meat> ::=
+
+!--- Rules ---------------------------------------------------------------------
+
+<meat_item> ::= <expression>
+
+<expression_list> ::= <expression_list> ',' <expression>
+<expression_list> ::= <expression>
+
+<expression> ::= <expression_add>
+
+<expression_add> ::= <expression_add> '+' <expression_mul>
+<expression_add> ::= <expression_add> '-' <expression_mul>
+<expression_add> ::= <expression_mul>
+
+<expression_mul> ::= <expression_mul> '*' <expression_pow>
+<expression_mul> ::= <expression_mul> '/' <expression_pow>
+<expression_mul> ::= <expression_pow>
+
+<expression_pow> ::= <expression_pow> '^' <expression_neg>
+<expression_pow> ::= <expression_neg>
+
+<expression_neg> ::= '-' <expression_neg>
+<expression_neg> ::= <r_value>
+
+<r_value> ::= '(' <expression> ')'
+<r_value> ::= <l_value>
+<r_value> ::= number
+
+<l_value> ::= identifier
+<l_value> ::= identifier '(' ')'
+<l_value> ::= identifier '(' <expression_list> ')'
+<l_value> ::= identifier '[' <expression> ']'
+<l_value> ::= identifier '.' <l_value>
