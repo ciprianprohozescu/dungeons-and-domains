@@ -1,0 +1,21 @@
+Package exercise40_fischer;
+
+Helpers
+    tab = 9;
+
+Tokens
+    e = 'exp';
+    other = 'other';
+    if = 'if';
+    then = 'then';
+    else = 'else';
+    blank = ' ' | tab;
+
+Ignored Tokens
+    blank;
+
+Productions
+    start = stmt;
+    stmt = {one} if e then [fst]:stmt else [snd]:stmt
+    | {two} if e then stmt
+    | {three} other;

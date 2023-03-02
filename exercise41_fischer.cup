@@ -1,0 +1,7 @@
+terminal IF, THEN, ELSE, E, OTHER;
+terminal Integer NUMBER;
+non terminal program, stmt, matched, unmatched;
+program ::= stmt;
+stmt ::= matched | unmatched;
+matched ::= IF E THEN matched ELSE matched | OTHER;
+unmatched ::= IF E THEN matched ELSE | IF E THEN unmatched;

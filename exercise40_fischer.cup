@@ -1,0 +1,7 @@
+terminal IF, THEN, ELSE, E, OTHER;
+terminal Integer NUMBER;
+non terminal program, stmt;
+program ::= stmt;
+stmt ::= IF E THEN stmt ELSE stmt
+| IF E THEN stmt
+| OTHER;
