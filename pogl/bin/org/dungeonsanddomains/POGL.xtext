@@ -1,0 +1,50 @@
+grammar org.dungeonsanddomains.POGL with org.eclipse.xtext.common.Terminals
+
+generate pogl "http://www.dungeonsanddomains.org/POGL"
+
+Program:
+	(definitions+=Definition)*
+;
+
+Definition:
+	definition=(StateDef | ItemDef | ActionDef) 
+;
+
+StateDef:
+	'state' name=ID optionalStateModifier=('start' | 'final')? message=STRING ';'
+;
+
+ItemDef:
+	'item' name=ID 'set' value=INT ';'
+;
+
+ActionDef:
+	'action' 'in' state=[StateDef] message=STRING 'do' (instructions+=Instruction)* 'end'
+;
+
+Instruction:
+	type=(ItemManipulation | Check | MessageDisplay | StateTransition)
+;
+
+ItemManipulation:
+	'item' item=[ItemDef] ('add' | 'remove') value=INT ';'
+;
+
+Check:
+	'check' item=[ItemDef] comparisonOperator=ComparisonOperator value=INT 
+	'then' (instructionsIfTrue+=Instruction)* 
+	'else' (instructionsIfFalse+=Instruction)* 
+	'endcheck'
+;
+
+ComparisonOperator:
+	'>' | '<' | '=' | '!=' | '>=' | '<='
+;
+
+MessageDisplay:
+	'show' message=STRING ';'
+;
+
+StateTransition:
+	'goto' state=[StateDef] ';'
+;
