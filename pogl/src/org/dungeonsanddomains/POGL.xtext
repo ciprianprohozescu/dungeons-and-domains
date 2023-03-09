@@ -33,7 +33,7 @@ ItemManipulation:
 Check:
 	'check' item=[ItemDef] comparisonOperator=ComparisonOperator value=INT 
 	'then' (instructionsIfTrue+=Instruction)* 
-	'else' (instructionsIfFalse+=Instruction)* 
+	('else' (instructionsIfFalse+=Instruction)*)?
 	'endcheck'
 ;
 

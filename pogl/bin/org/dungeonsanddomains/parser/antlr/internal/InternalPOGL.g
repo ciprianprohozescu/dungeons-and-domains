@@ -656,32 +656,34 @@ ruleCheck returns [EObject current=null]
 				}
 			)
 		)*
-		otherlv_6='else'
-		{
-			newLeafNode(otherlv_6, grammarAccess.getCheckAccess().getElseKeyword_6());
-		}
 		(
+			otherlv_6='else'
+			{
+				newLeafNode(otherlv_6, grammarAccess.getCheckAccess().getElseKeyword_6_0());
+			}
 			(
-				{
-					newCompositeNode(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_7_0());
-				}
-				lv_instructionsIfFalse_7_0=ruleInstruction
-				{
-					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getCheckRule());
+				(
+					{
+						newCompositeNode(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_6_1_0());
 					}
-					add(
-						$current,
-						"instructionsIfFalse",
-						lv_instructionsIfFalse_7_0,
-						"org.dungeonsanddomains.POGL.Instruction");
-					afterParserOrEnumRuleCall();
-				}
-			)
-		)*
+					lv_instructionsIfFalse_7_0=ruleInstruction
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getCheckRule());
+						}
+						add(
+							$current,
+							"instructionsIfFalse",
+							lv_instructionsIfFalse_7_0,
+							"org.dungeonsanddomains.POGL.Instruction");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)*
+		)?
 		otherlv_8='endcheck'
 		{
-			newLeafNode(otherlv_8, grammarAccess.getCheckAccess().getEndcheckKeyword_8());
+			newLeafNode(otherlv_8, grammarAccess.getCheckAccess().getEndcheckKeyword_7());
 		}
 	)
 ;

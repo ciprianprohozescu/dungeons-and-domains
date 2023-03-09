@@ -1245,9 +1245,9 @@ rule__Check__Group__6__Impl
 	}
 :
 (
-	{ before(grammarAccess.getCheckAccess().getElseKeyword_6()); }
-	'else'
-	{ after(grammarAccess.getCheckAccess().getElseKeyword_6()); }
+	{ before(grammarAccess.getCheckAccess().getGroup_6()); }
+	(rule__Check__Group_6__0)?
+	{ after(grammarAccess.getCheckAccess().getGroup_6()); }
 )
 ;
 finally {
@@ -1260,7 +1260,6 @@ rule__Check__Group__7
 	}
 :
 	rule__Check__Group__7__Impl
-	rule__Check__Group__8
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -1272,35 +1271,63 @@ rule__Check__Group__7__Impl
 	}
 :
 (
-	{ before(grammarAccess.getCheckAccess().getInstructionsIfFalseAssignment_7()); }
-	(rule__Check__InstructionsIfFalseAssignment_7)*
-	{ after(grammarAccess.getCheckAccess().getInstructionsIfFalseAssignment_7()); }
+	{ before(grammarAccess.getCheckAccess().getEndcheckKeyword_7()); }
+	'endcheck'
+	{ after(grammarAccess.getCheckAccess().getEndcheckKeyword_7()); }
 )
 ;
 finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Check__Group__8
+
+rule__Check__Group_6__0
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
-	rule__Check__Group__8__Impl
+	rule__Check__Group_6__0__Impl
+	rule__Check__Group_6__1
 ;
 finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Check__Group__8__Impl
+rule__Check__Group_6__0__Impl
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 (
-	{ before(grammarAccess.getCheckAccess().getEndcheckKeyword_8()); }
-	'endcheck'
-	{ after(grammarAccess.getCheckAccess().getEndcheckKeyword_8()); }
+	{ before(grammarAccess.getCheckAccess().getElseKeyword_6_0()); }
+	'else'
+	{ after(grammarAccess.getCheckAccess().getElseKeyword_6_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Check__Group_6__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Check__Group_6__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Check__Group_6__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getCheckAccess().getInstructionsIfFalseAssignment_6_1()); }
+	(rule__Check__InstructionsIfFalseAssignment_6_1)*
+	{ after(grammarAccess.getCheckAccess().getInstructionsIfFalseAssignment_6_1()); }
 )
 ;
 finally {
@@ -1737,15 +1764,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Check__InstructionsIfFalseAssignment_7
+rule__Check__InstructionsIfFalseAssignment_6_1
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 	(
-		{ before(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_7_0()); }
+		{ before(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_6_1_0()); }
 		ruleInstruction
-		{ after(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_7_0()); }
+		{ after(grammarAccess.getCheckAccess().getInstructionsIfFalseInstructionParserRuleCall_6_1_0()); }
 	)
 ;
 finally {

@@ -9,9 +9,9 @@
 'add'=13
 'check'=29
 'do'=27
-'else'=31
+'else'=32
 'end'=28
-'endcheck'=32
+'endcheck'=31
 'final'=12
 'goto'=34
 'in'=26
