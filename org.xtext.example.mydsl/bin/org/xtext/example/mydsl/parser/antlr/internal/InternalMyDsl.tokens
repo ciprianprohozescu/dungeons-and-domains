@@ -10,15 +10,15 @@
 'check'=23
 'do'=19
 'else'=25
-'endaction'=20
+'end'=20
 'endcheck'=26
 'final'=13
 'goto'=34
 'in'=18
 'item'=15
-'print'=33
 'remove'=22
 'set'=16
+'show'=33
 'start'=12
 'state'=11
 'then'=24

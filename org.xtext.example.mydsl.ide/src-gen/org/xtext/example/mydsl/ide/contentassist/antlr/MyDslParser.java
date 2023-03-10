@@ -31,7 +31,7 @@ public class MyDslParser extends AbstractContentAssistParser {
 		}
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, MyDslGrammarAccess grammarAccess) {
-			builder.put(grammarAccess.getStatementAccess().getAlternatives_0(), "rule__Statement__Alternatives_0");
+			builder.put(grammarAccess.getStatementAccess().getAlternatives(), "rule__Statement__Alternatives");
 			builder.put(grammarAccess.getAssignmentAccess().getAlternatives_1(), "rule__Assignment__Alternatives_1");
 			builder.put(grammarAccess.getTermAccess().getAlternatives(), "rule__Term__Alternatives");
 			builder.put(grammarAccess.getRelationalOperatorAccess().getAlternatives(), "rule__RelationalOperator__Alternatives");
@@ -39,7 +39,6 @@ public class MyDslParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getStateAccess().getGroup(), "rule__State__Group__0");
 			builder.put(grammarAccess.getItemAccess().getGroup(), "rule__Item__Group__0");
 			builder.put(grammarAccess.getActionAccess().getGroup(), "rule__Action__Group__0");
-			builder.put(grammarAccess.getStatementAccess().getGroup(), "rule__Statement__Group__0");
 			builder.put(grammarAccess.getAssignmentAccess().getGroup(), "rule__Assignment__Group__0");
 			builder.put(grammarAccess.getConditionalAccess().getGroup(), "rule__Conditional__Group__0");
 			builder.put(grammarAccess.getConditionalAccess().getGroup_4(), "rule__Conditional__Group_4__0");
@@ -56,10 +55,10 @@ public class MyDslParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getActionAccess().getStateAssignment_2(), "rule__Action__StateAssignment_2");
 			builder.put(grammarAccess.getActionAccess().getDescriptionAssignment_3(), "rule__Action__DescriptionAssignment_3");
 			builder.put(grammarAccess.getActionAccess().getStatementsAssignment_5(), "rule__Action__StatementsAssignment_5");
-			builder.put(grammarAccess.getStatementAccess().getAssignmentAssignment_0_0(), "rule__Statement__AssignmentAssignment_0_0");
-			builder.put(grammarAccess.getStatementAccess().getConditionalAssignment_0_1(), "rule__Statement__ConditionalAssignment_0_1");
-			builder.put(grammarAccess.getStatementAccess().getActionAssignment_0_2(), "rule__Statement__ActionAssignment_0_2");
-			builder.put(grammarAccess.getStatementAccess().getPrintAssignment_0_3(), "rule__Statement__PrintAssignment_0_3");
+			builder.put(grammarAccess.getStatementAccess().getAssignmentAssignment_0(), "rule__Statement__AssignmentAssignment_0");
+			builder.put(grammarAccess.getStatementAccess().getConditionalAssignment_1(), "rule__Statement__ConditionalAssignment_1");
+			builder.put(grammarAccess.getStatementAccess().getActionAssignment_2(), "rule__Statement__ActionAssignment_2");
+			builder.put(grammarAccess.getStatementAccess().getPrintAssignment_3(), "rule__Statement__PrintAssignment_3");
 			builder.put(grammarAccess.getAssignmentAccess().getTargetAssignment_0(), "rule__Assignment__TargetAssignment_0");
 			builder.put(grammarAccess.getAssignmentAccess().getValueAssignment_2(), "rule__Assignment__ValueAssignment_2");
 			builder.put(grammarAccess.getConditionalAccess().getExpressionAssignment_1(), "rule__Conditional__ExpressionAssignment_1");

@@ -356,9 +356,9 @@ ruleAction returns [EObject current=null]
 				}
 			)
 		)*
-		otherlv_6='endaction'
+		otherlv_6='end'
 		{
-			newLeafNode(otherlv_6, grammarAccess.getActionAccess().getEndactionKeyword_6());
+			newLeafNode(otherlv_6, grammarAccess.getActionAccess().getEndKeyword_6());
 		}
 	)
 ;
@@ -381,89 +381,83 @@ ruleStatement returns [EObject current=null]
 	(
 		(
 			(
-				(
-					{
-						newCompositeNode(grammarAccess.getStatementAccess().getAssignmentAssignmentParserRuleCall_0_0_0());
+				{
+					newCompositeNode(grammarAccess.getStatementAccess().getAssignmentAssignmentParserRuleCall_0_0());
+				}
+				lv_assignment_0_0=ruleAssignment
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getStatementRule());
 					}
-					lv_assignment_0_0=ruleAssignment
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getStatementRule());
-						}
-						set(
-							$current,
-							"assignment",
-							lv_assignment_0_0,
-							"org.xtext.example.mydsl.MyDsl.Assignment");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-			    |
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getStatementAccess().getConditionalConditionalParserRuleCall_0_1_0());
-					}
-					lv_conditional_1_0=ruleConditional
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getStatementRule());
-						}
-						set(
-							$current,
-							"conditional",
-							lv_conditional_1_0,
-							"org.xtext.example.mydsl.MyDsl.Conditional");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-			    |
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getStatementAccess().getActionSimpleActionParserRuleCall_0_2_0());
-					}
-					lv_action_2_0=ruleSimpleAction
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getStatementRule());
-						}
-						set(
-							$current,
-							"action",
-							lv_action_2_0,
-							"org.xtext.example.mydsl.MyDsl.SimpleAction");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
-			    |
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getStatementAccess().getPrintPrintParserRuleCall_0_3_0());
-					}
-					lv_print_3_0=rulePrint
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getStatementRule());
-						}
-						set(
-							$current,
-							"print",
-							lv_print_3_0,
-							"org.xtext.example.mydsl.MyDsl.Print");
-						afterParserOrEnumRuleCall();
-					}
-				)
+					set(
+						$current,
+						"assignment",
+						lv_assignment_0_0,
+						"org.xtext.example.mydsl.MyDsl.Assignment");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)
-		otherlv_4=';'
-		{
-			newLeafNode(otherlv_4, grammarAccess.getStatementAccess().getSemicolonKeyword_1());
-		}
+		    |
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getStatementAccess().getConditionalConditionalParserRuleCall_1_0());
+				}
+				lv_conditional_1_0=ruleConditional
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getStatementRule());
+					}
+					set(
+						$current,
+						"conditional",
+						lv_conditional_1_0,
+						"org.xtext.example.mydsl.MyDsl.Conditional");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		    |
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getStatementAccess().getActionSimpleActionParserRuleCall_2_0());
+				}
+				lv_action_2_0=ruleSimpleAction
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getStatementRule());
+					}
+					set(
+						$current,
+						"action",
+						lv_action_2_0,
+						"org.xtext.example.mydsl.MyDsl.SimpleAction");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		    |
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getStatementAccess().getPrintPrintParserRuleCall_3_0());
+				}
+				lv_print_3_0=rulePrint
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getStatementRule());
+					}
+					set(
+						$current,
+						"print",
+						lv_print_3_0,
+						"org.xtext.example.mydsl.MyDsl.Print");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
 	)
 ;
 
@@ -525,6 +519,10 @@ ruleAssignment returns [EObject current=null]
 				}
 			)
 		)
+		otherlv_4=';'
+		{
+			newLeafNode(otherlv_4, grammarAccess.getAssignmentAccess().getSemicolonKeyword_3());
+		}
 	)
 ;
 
@@ -838,9 +836,9 @@ rulePrint returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		otherlv_0='print'
+		otherlv_0='show'
 		{
-			newLeafNode(otherlv_0, grammarAccess.getPrintAccess().getPrintKeyword_0());
+			newLeafNode(otherlv_0, grammarAccess.getPrintAccess().getShowKeyword_0());
 		}
 		(
 			(
@@ -860,6 +858,10 @@ rulePrint returns [EObject current=null]
 				}
 			)
 		)
+		otherlv_2=';'
+		{
+			newLeafNode(otherlv_2, grammarAccess.getPrintAccess().getSemicolonKeyword_2());
+		}
 	)
 ;
 
@@ -896,6 +898,10 @@ ruleSimpleAction returns [EObject current=null]
 				}
 			)
 		)
+		otherlv_2=';'
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSimpleActionAccess().getSemicolonKeyword_2());
+		}
 	)
 ;
 

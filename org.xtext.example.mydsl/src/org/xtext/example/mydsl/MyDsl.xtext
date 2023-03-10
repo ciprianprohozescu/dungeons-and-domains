@@ -19,15 +19,15 @@ Item:
 Action:
   'action' 'in' state=[State] description=STRING 'do'
    statements+=Statement*
-   'endaction'
+   'end'
 ;
 
 Statement:
-  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print) ';'
+  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print)
 ;
 
 Assignment:
-  target=[Item] ('add' | 'remove') value=INT 
+  target=[Item] ('add' | 'remove') value=INT  ';'
 ;
 
 Conditional:
@@ -35,7 +35,7 @@ Conditional:
 ;
 
 Expression:
-  left=Term operator=RelationalOperator right=Term
+  left=Term operator=RelationalOperator right=Term  
 ;
 
 Term:
@@ -50,9 +50,9 @@ Block:
  statements+=Statement* 
 ;
 Print:
-	'print' description=STRING
+	'show' description=STRING  ';'
 ;
 
 SimpleAction:
-  'goto' state=[State]
+  'goto' state=[State]  ';'
 ;

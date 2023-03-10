@@ -159,18 +159,18 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		private final Keyword cDoKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		private final Assignment cStatementsAssignment_5 = (Assignment)cGroup.eContents().get(5);
 		private final RuleCall cStatementsStatementParserRuleCall_5_0 = (RuleCall)cStatementsAssignment_5.eContents().get(0);
-		private final Keyword cEndactionKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Keyword cEndKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
 		//Action:
 		//  'action' 'in' state=[State] description=STRING 'do'
 		//   statements+=Statement*
-		//   'endaction'
+		//   'end'
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'action' 'in' state=[State] description=STRING 'do'
 		// statements+=Statement*
-		// 'endaction'
+		// 'end'
 		public Group getGroup() { return cGroup; }
 		
 		//'action'
@@ -203,60 +203,52 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		//Statement
 		public RuleCall getStatementsStatementParserRuleCall_5_0() { return cStatementsStatementParserRuleCall_5_0; }
 		
-		//'endaction'
-		public Keyword getEndactionKeyword_6() { return cEndactionKeyword_6; }
+		//'end'
+		public Keyword getEndKeyword_6() { return cEndKeyword_6; }
 	}
 	public class StatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Statement");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
-		private final Assignment cAssignmentAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
-		private final RuleCall cAssignmentAssignmentParserRuleCall_0_0_0 = (RuleCall)cAssignmentAssignment_0_0.eContents().get(0);
-		private final Assignment cConditionalAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
-		private final RuleCall cConditionalConditionalParserRuleCall_0_1_0 = (RuleCall)cConditionalAssignment_0_1.eContents().get(0);
-		private final Assignment cActionAssignment_0_2 = (Assignment)cAlternatives_0.eContents().get(2);
-		private final RuleCall cActionSimpleActionParserRuleCall_0_2_0 = (RuleCall)cActionAssignment_0_2.eContents().get(0);
-		private final Assignment cPrintAssignment_0_3 = (Assignment)cAlternatives_0.eContents().get(3);
-		private final RuleCall cPrintPrintParserRuleCall_0_3_0 = (RuleCall)cPrintAssignment_0_3.eContents().get(0);
-		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cAssignmentAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cAssignmentAssignmentParserRuleCall_0_0 = (RuleCall)cAssignmentAssignment_0.eContents().get(0);
+		private final Assignment cConditionalAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cConditionalConditionalParserRuleCall_1_0 = (RuleCall)cConditionalAssignment_1.eContents().get(0);
+		private final Assignment cActionAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cActionSimpleActionParserRuleCall_2_0 = (RuleCall)cActionAssignment_2.eContents().get(0);
+		private final Assignment cPrintAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cPrintPrintParserRuleCall_3_0 = (RuleCall)cPrintAssignment_3.eContents().get(0);
 		
 		//Statement:
-		//  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print) ';'
+		//  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print)
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print) ';'
-		public Group getGroup() { return cGroup; }
-		
 		//(assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print)
-		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//assignment=Assignment
-		public Assignment getAssignmentAssignment_0_0() { return cAssignmentAssignment_0_0; }
+		public Assignment getAssignmentAssignment_0() { return cAssignmentAssignment_0; }
 		
 		//Assignment
-		public RuleCall getAssignmentAssignmentParserRuleCall_0_0_0() { return cAssignmentAssignmentParserRuleCall_0_0_0; }
+		public RuleCall getAssignmentAssignmentParserRuleCall_0_0() { return cAssignmentAssignmentParserRuleCall_0_0; }
 		
 		//conditional=Conditional
-		public Assignment getConditionalAssignment_0_1() { return cConditionalAssignment_0_1; }
+		public Assignment getConditionalAssignment_1() { return cConditionalAssignment_1; }
 		
 		//Conditional
-		public RuleCall getConditionalConditionalParserRuleCall_0_1_0() { return cConditionalConditionalParserRuleCall_0_1_0; }
+		public RuleCall getConditionalConditionalParserRuleCall_1_0() { return cConditionalConditionalParserRuleCall_1_0; }
 		
 		//action=SimpleAction
-		public Assignment getActionAssignment_0_2() { return cActionAssignment_0_2; }
+		public Assignment getActionAssignment_2() { return cActionAssignment_2; }
 		
 		//SimpleAction
-		public RuleCall getActionSimpleActionParserRuleCall_0_2_0() { return cActionSimpleActionParserRuleCall_0_2_0; }
+		public RuleCall getActionSimpleActionParserRuleCall_2_0() { return cActionSimpleActionParserRuleCall_2_0; }
 		
 		//print=Print
-		public Assignment getPrintAssignment_0_3() { return cPrintAssignment_0_3; }
+		public Assignment getPrintAssignment_3() { return cPrintAssignment_3; }
 		
 		//Print
-		public RuleCall getPrintPrintParserRuleCall_0_3_0() { return cPrintPrintParserRuleCall_0_3_0; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
+		public RuleCall getPrintPrintParserRuleCall_3_0() { return cPrintPrintParserRuleCall_3_0; }
 	}
 	public class AssignmentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Assignment");
@@ -269,13 +261,14 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		private final Keyword cRemoveKeyword_1_1 = (Keyword)cAlternatives_1.eContents().get(1);
 		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cValueINTTerminalRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//Assignment:
-		//  target=[Item] ('add' | 'remove') value=INT
+		//  target=[Item] ('add' | 'remove') value=INT  ';'
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//target=[Item] ('add' | 'remove') value=INT
+		//target=[Item] ('add' | 'remove') value=INT  ';'
 		public Group getGroup() { return cGroup; }
 		
 		//target=[Item]
@@ -301,6 +294,9 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		
 		//INT
 		public RuleCall getValueINTTerminalRuleCall_2_0() { return cValueINTTerminalRuleCall_2_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
 	}
 	public class ConditionalElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Conditional");
@@ -469,26 +465,30 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	public class PrintElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Print");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cPrintKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cShowKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cDescriptionAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cDescriptionSTRINGTerminalRuleCall_1_0 = (RuleCall)cDescriptionAssignment_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//Print:
-		//    'print' description=STRING
+		//    'show' description=STRING  ';'
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'print' description=STRING
+		//'show' description=STRING  ';'
 		public Group getGroup() { return cGroup; }
 		
-		//'print'
-		public Keyword getPrintKeyword_0() { return cPrintKeyword_0; }
+		//'show'
+		public Keyword getShowKeyword_0() { return cShowKeyword_0; }
 		
 		//description=STRING
 		public Assignment getDescriptionAssignment_1() { return cDescriptionAssignment_1; }
 		
 		//STRING
 		public RuleCall getDescriptionSTRINGTerminalRuleCall_1_0() { return cDescriptionSTRINGTerminalRuleCall_1_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
 	}
 	public class SimpleActionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.SimpleAction");
@@ -497,13 +497,14 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		private final Assignment cStateAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final CrossReference cStateStateCrossReference_1_0 = (CrossReference)cStateAssignment_1.eContents().get(0);
 		private final RuleCall cStateStateIDTerminalRuleCall_1_0_1 = (RuleCall)cStateStateCrossReference_1_0.eContents().get(1);
+		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//SimpleAction:
-		//  'goto' state=[State]
+		//  'goto' state=[State]  ';'
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'goto' state=[State]
+		//'goto' state=[State]  ';'
 		public Group getGroup() { return cGroup; }
 		
 		//'goto'
@@ -517,6 +518,9 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		
 		//ID
 		public RuleCall getStateStateIDTerminalRuleCall_1_0_1() { return cStateStateIDTerminalRuleCall_1_0_1; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
 	}
 	
 	
@@ -622,7 +626,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	//Action:
 	//  'action' 'in' state=[State] description=STRING 'do'
 	//   statements+=Statement*
-	//   'endaction'
+	//   'end'
 	//;
 	public ActionElements getActionAccess() {
 		return pAction;
@@ -633,7 +637,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	}
 	
 	//Statement:
-	//  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print) ';'
+	//  (assignment=Assignment | conditional=Conditional | action=SimpleAction | print=Print)
 	//;
 	public StatementElements getStatementAccess() {
 		return pStatement;
@@ -644,7 +648,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	}
 	
 	//Assignment:
-	//  target=[Item] ('add' | 'remove') value=INT
+	//  target=[Item] ('add' | 'remove') value=INT  ';'
 	//;
 	public AssignmentElements getAssignmentAccess() {
 		return pAssignment;
@@ -710,7 +714,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	}
 	
 	//Print:
-	//    'print' description=STRING
+	//    'show' description=STRING  ';'
 	//;
 	public PrintElements getPrintAccess() {
 		return pPrint;
@@ -721,7 +725,7 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	}
 	
 	//SimpleAction:
-	//  'goto' state=[State]
+	//  'goto' state=[State]  ';'
 	//;
 	public SimpleActionElements getSimpleActionAccess() {
 		return pSimpleAction;
