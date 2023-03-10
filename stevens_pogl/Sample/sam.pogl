@@ -1,0 +1,32 @@
+State s0 start "You are in a tavern";
+State s1 "You are in a cellar with a monster";
+State s2 final "You die";
+State s3 final "You are drunk";
+
+// Define inventory
+Item money set 20;
+Item photo set 1;
+Item courage set 0;
+
+// Define actions
+Action in s0 "Buy a drink" do
+	check money > 10 then
+		Item money remove 10;
+		goto s3;
+	else
+		Show "You don't have enough money!"
+	endcheck
+end
+
+Action in s0"Go to the cellar, find 10 gold" do
+	Item money add 10;
+	goto s1;
+end
+
+Action in s1 "Run away" do
+	goto s0;
+end
+
+Action in s1 "Fight the monster" do
+	goto s2;
+end

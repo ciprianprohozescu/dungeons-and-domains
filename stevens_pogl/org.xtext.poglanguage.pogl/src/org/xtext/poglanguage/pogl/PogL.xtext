@@ -1,0 +1,79 @@
+grammar org.xtext.poglanguage.pogl.PogL with org.eclipse.xtext.common.Terminals
+
+generate pogL "http://www.xtext.org/poglanguage/pogl/PogL"
+
+Program: (models+=Model)* ;
+
+Model:
+	model=(State|Item|Check|Action)
+;
+
+State:
+	'State' Fstate ';';
+
+Fstate:
+	name=ID Fstate_name=Fstate_name
+;
+	
+Fstate_name:
+    'start' description=STRING|
+	'final' description=STRING|
+	description=STRING
+;
+	
+
+Item:
+	'Item' Fitem ';'
+;
+
+Fitem: 
+	name=ID Fitem_name=Fitem_name
+;
+
+Fitem_name: 
+	'set' amount=INT|
+	'add' amount=INT|
+	'remove' amount=INT
+; 
+
+Goto:
+	"goto" state_name=[Fstate] ";"
+;
+
+Show: 
+	"Show" text=STRING ";"
+;
+
+Operation:
+	State|Item|Action|Check|Goto|Show
+;
+
+Operations:	
+	operation=Operation Foperations=FOperations?
+;
+FOperations: 
+	operations=Operations
+;
+
+
+ComparisonOperators:
+	'<'|'>'|'='
+;
+
+Check: "check" Fcheck=FCheck;
+FCheck: item=[Fitem] FCheck_item=FCheck_item;
+FCheck_item: comparisonOperator=ComparisonOperators FComparison_Operators=FComparison_Operators;
+FComparison_Operators: INT FINT;
+FINT: "then" Fthen;
+Fthen: operationtrue=Operations FThenOperations=FThenOperations;
+FThenOperations: 
+	"else" operationfalse=Operations "endcheck"|
+	{FThenOperations} "endcheck"
+;
+	
+Action:
+	"Action" "in" state_name=ID description=STRING 
+	"do" operations=Operations?
+	"end"  
+;
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pogL" nsURI="http://www.xtext.org/poglanguage/pogl/PogL" nsPrefix="pogL">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
+        eType="#//Model" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//Operation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fstate" eSuperTypes="#//State">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Fstate_name" eType="#//Fstate_name"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fstate_name">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" eSuperTypes="#//Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fitem" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Fitem_name" eType="#//Fitem_name"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fitem_name">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="amount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Goto" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state_name" eType="#//Fstate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Show" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Foperations" eType="#//FOperations"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FOperations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" eType="#//Operations"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Check" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Fcheck" eType="#//FCheck"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FCheck">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" eType="#//Fitem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FCheck_item" eType="#//FCheck_item"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FCheck_item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comparisonOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FComparison_Operators"
+        eType="#//FComparison_Operators" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FComparison_Operators"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FINT" eSuperTypes="#//FComparison_Operators"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fthen" eSuperTypes="#//FINT">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationtrue" eType="#//Operations"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FThenOperations" eType="#//FThenOperations"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FThenOperations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationfalse" eType="#//Operations"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state_name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" eType="#//Operations"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
