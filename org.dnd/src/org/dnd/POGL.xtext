@@ -1,0 +1,59 @@
+grammar org.dnd.POGL with org.eclipse.xtext.common.Terminals
+
+generate pOGL "http://www.dnd.org/POGL"
+
+Program:
+    (definitions+=Definition)*
+;
+
+Definition:
+    definition=(State | Item | Action) 
+;
+
+State:
+    'state' name=ID optionalStateModifier=('start' | 'final')? description=STRING ';'
+;
+
+Item:
+    'item' name=ID ('set' value=INT)? ';'
+;
+
+//TODO: Hidden actions or instruction to create actions
+Action:
+    'action' 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'end'
+;
+
+Instruction:
+    type=(ItemManipulation | Check | MessageDisplay | StateTransition)
+;
+
+ItemManipulation:
+    'item' item=[Item] ('add' | 'remove' | 'set') value=INT ';'
+;
+
+Check:
+    'check' expression=Expression ('and' and_expression+=Expression)*
+    'then' (instructionsIfTrue+=Instruction)* 
+    ('else' (instructionsIfFalse+=Instruction)*)?
+    'endcheck'
+;
+
+Expression:
+	left=Term operator=ComparisonOperator right=Term
+;
+
+Term:
+	term_int=INT | term_item=[Item]
+;
+
+ComparisonOperator:
+    '>' | '<' | '=' | '!=' | '>=' | '<='
+;
+
+MessageDisplay:
+    'show' message=STRING ';'
+;
+
+StateTransition:
+    'goto' state=[State] ';'
+;
