@@ -10,3 +10,7 @@ org.dnd/src/org/*
 !org.dnd/src/org/dnd
 org.dnd/src/org/dnd/*
 !org.dnd/src/org/dnd/POGL.xtext
+
+.metadata/
+
+.DS_Store
