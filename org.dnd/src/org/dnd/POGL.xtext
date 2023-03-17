@@ -20,15 +20,15 @@ Item:
 
 //TODO: Hidden actions or instruction to create actions
 Action:
-    'action' 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'end'
+    'action' name=ID visibility=('hidden')? 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'end'
 ;
 
 Instruction:
-    type=(ItemManipulation | Check | MessageDisplay | StateTransition)
+    type=(ItemManipulation | Check | MessageDisplay | ActionVisibilityChange | StateTransition)
 ;
 
 ItemManipulation:
-    'item' item=[Item] ('add' | 'remove' | 'set') value=INT ';'
+    item=[Item] operator=('add' | 'remove' | 'set') value=INT ';'
 ;
 
 Check:
@@ -52,6 +52,10 @@ ComparisonOperator:
 
 MessageDisplay:
     'show' message=STRING ';'
+;
+
+ActionVisibilityChange:
+	verb=('reveal' | 'hide') action=[Action] ';'
 ;
 
 StateTransition:
