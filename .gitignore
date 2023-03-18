@@ -1,6 +1,9 @@
 org.dnd/*
 org.dnd.ide/*
 org.dnd.tests/*
+!org.dnd.tests/src
+org.dnd.tests/src/*
+!org.dnd.tests/src/org
 org.dnd.ui/*
 org.dnd.ui.tests/*
 !org.dnd/src
@@ -10,7 +13,7 @@ org.dnd/src/org/*
 !org.dnd/src/org/dnd
 org.dnd/src/org/dnd/*
 !org.dnd/src/org/dnd/validation
-!org.dnd/src/org/dnd/POGL.xtext
+!org.dnd/src/org/dnd/generator
 
 .metadata/
 

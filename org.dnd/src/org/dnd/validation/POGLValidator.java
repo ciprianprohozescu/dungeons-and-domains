@@ -15,11 +15,11 @@ public class POGLValidator extends AbstractPOGLValidator {
 	
 	public static final String INVALID_NAME = "invalidName";
 
-	@Check
-	public void checkGreetingStartsWithCapital(org.dnd.pOGL.State state) {
-		if (!Character.isUpperCase(state.getName().charAt(0))) {
-			warning("State name should start with a capital", POGLPackage.Literals.STATE__NAME, INVALID_NAME);
-		}
-	}
+//	@Check
+//	public void checkGreetingStartsWithCapital(org.dnd.pOGL.State state) {
+//		if (!Character.isUpperCase(state.getName().charAt(0))) {
+//			warning("State name should start with a capital", POGLPackage.Literals.STATE__NAME, INVALID_NAME);
+//		}
+//	}
 	
 }
