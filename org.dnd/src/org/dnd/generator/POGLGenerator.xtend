@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import org.dnd.pOGL.POGLPackage;
+import com.google.inject.Inject
 
 /**
  * Generates code from your model files on save.
@@ -16,89 +16,14 @@ import org.dnd.pOGL.POGLPackage;
  */
 class POGLGenerator extends AbstractGenerator {
 
-	String program
+	@Inject POGLPrettyPrinter prettyPrinter
+	@Inject POGLDummyGenerator dummyGenerator
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		program = ""
-				
-		// Pretty-print states
-		for (e : resource.allContents.toIterable.filter(org.dnd.pOGL.State)) {
-            program += e.compile
-        }
-        
-        program += "\n"
-        
-        // Pretty-print items
-		for (e : resource.allContents.toIterable.filter(org.dnd.pOGL.Item)) {
-            program += e.compile
-        }
-        
-        program += "\n"
-        
-        // Pretty-print actions
-		for (e : resource.allContents.toIterable.filter(org.dnd.pOGL.Action)) {
-            program += e.compile + "\n"
-        }
-        
-        // Generate output file
-        fsa.generateFile('pretty_pogl.pogl', program)
+		// Pretty-print
+		prettyPrinter.generate(resource, fsa)
+		
+		// Dummy generation
+		dummyGenerator.generate(resource, fsa)
 	}
-	
-	private def dispatch compile(org.dnd.pOGL.State state) '''
-        state «state.name» «state.optionalStateModifier» "«state.description»";
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.Item item) '''
-        item «item.name»«IF item.eIsSet(POGLPackage.Literals.ITEM__VALUE)» set «item.value»«ENDIF»;
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.Action action) '''
-        action «action.name» «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»«action.visibility»«ENDIF» in «action.state.name» "«action.description»" do
-        	«FOR instruction : action.instructions»«instruction.compile»«ENDFOR»
-        end
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.ItemManipulation itemManipulation) '''
-        «itemManipulation.item.name» «itemManipulation.operator» «itemManipulation.value»;
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.Check check) {
-    	var content = "check " + check.expression.compile;
-    	for (expression : check.andExpressions) {
-    		content += " and " + expression.compile
-    	}
-    	return content + "then\n" + '''
-	        	«FOR instruction : check.instructionsIfTrue»«instruction.compile»«ENDFOR»
-	        «IF check.eIsSet(POGLPackage.Literals.CHECK__INSTRUCTIONS_IF_FALSE)»
-	        else
-	        	«FOR instruction : check.instructionsIfFalse»«instruction.compile»«ENDFOR»
-	        «ENDIF»
-	        endcheck
-    	'''
-    }
-    
-    private def dispatch compile(org.dnd.pOGL.Expression expression) '''
-        «expression.left.compile» «expression.operator» «expression.right.compile»
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.Term term) {
-    	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_INT))
-    		return term.termInt
-    	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_ITEM))
-    		return term.termItem.name
-    	return "0"
-    }
-    
-    
-    private def dispatch compile(org.dnd.pOGL.MessageDisplay messageDisplay) '''
-        show "«messageDisplay.message»";
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange) '''
-        «actionVisibilityChange.verb» «actionVisibilityChange.action.name»;
-    '''
-    
-    private def dispatch compile(org.dnd.pOGL.StateTransition stateTransition) '''
-        goto «stateTransition.state.name»;
-    '''
 }
