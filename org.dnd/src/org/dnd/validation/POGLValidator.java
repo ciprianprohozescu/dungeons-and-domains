@@ -6,7 +6,6 @@ package org.dnd.validation;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +21,6 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -48,8 +46,8 @@ public class POGLValidator extends AbstractPOGLValidator {
 			if (def.getDefinition() instanceof Action) {
 				Action action = (Action) def.getDefinition();
 				for (Instruction instr : action.getInstructions()) {
-                    if (instr.getType() instanceof ItemManipulation) {
-                    	ItemManipulation itemManipulation = (ItemManipulation) instr.getType();
+                    if (instr instanceof ItemManipulation) {
+                    	ItemManipulation itemManipulation = (ItemManipulation) instr;
                     	Item item = itemManipulation.getItem();
                     	usedVariables.add(item);
                     }
@@ -76,10 +74,16 @@ public class POGLValidator extends AbstractPOGLValidator {
             } else if (def.getDefinition() instanceof Action) {
             	Action action = (Action) def.getDefinition();
                 for (Instruction instr : action.getInstructions()) {
+                	/*
                     if (instr.getType() instanceof StateTransition) {
                     	StateTransition transition = (StateTransition) instr.getType();
                         graph.addEdge(action.getState(), transition.getState());
                     }
+                    */
+                   if (instr instanceof StateTransition) {
+                	   StateTransition transition = (StateTransition) instr;
+                       graph.addEdge(action.getState(), transition.getState());
+                   }
                 }
             }
         }
@@ -145,12 +149,6 @@ public class POGLValidator extends AbstractPOGLValidator {
 					foundStartState = true;
 					statesUsed.add(state);
 				}			
-			}
-			else if (definition.getDefinition() instanceof Action) {
-				Action action = (Action) definition.getDefinition();
-				for(Instruction inst : action.getInstructions()) {
-					inst.getType();
-				}
 			}
 		}
 	}
