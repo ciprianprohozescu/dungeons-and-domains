@@ -24,7 +24,7 @@ Action:
 ;
 
 Instruction:
-    type=(ItemManipulation | Check | MessageDisplay | ActionVisibilityChange | StateTransition)
+    ItemManipulation | Check | MessageDisplay | ActionVisibilityChange | StateTransition
 ;
 
 ItemManipulation:
@@ -32,7 +32,7 @@ ItemManipulation:
 ;
 
 Check:
-    'check' expression=Expression ('and' and_expression+=Expression)*
+    'check' expression=Expression ('and' andExpressions+=Expression)*
     'then' (instructionsIfTrue+=Instruction)* 
     ('else' (instructionsIfFalse+=Instruction)*)?
     'endcheck'
@@ -43,7 +43,7 @@ Expression:
 ;
 
 Term:
-	term_int=INT | term_item=[Item]
+	termInt=INT | termItem=[Item]
 ;
 
 ComparisonOperator:
