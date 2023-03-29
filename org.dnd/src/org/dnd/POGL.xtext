@@ -33,7 +33,7 @@ ItemManipulation:
 
 Check:
     'check' expression=Expression ('and' andExpressions+=Expression)*
-    'then' (instructionsIfTrue+=Instruction)* 
+    'then' (instructionsIfTrue+=Instruction)+ 
     ('else' (instructionsIfFalse+=Instruction)*)?
     'endcheck'
 ;
