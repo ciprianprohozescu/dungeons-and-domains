@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.dnd
+Bundle-ManifestVersion: 2
+Bundle-Name: org.dnd
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.dnd; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: org.dnd.parser.antlr,
+ org.dnd.validation,
+ org.dnd.generator,
+ org.dnd.pOGL.impl,
+ org.dnd.pOGL,
+ org.dnd.services,
+ org.dnd.serializer,
+ org.dnd,
+ org.dnd.parser.antlr.internal,
+ org.dnd.scoping,
+ org.dnd.pOGL.util
+Import-Package: org.apache.log4j
+Bundle-ClassPath: .,
+ lib/jgrapht-1.5.1/lib/jgrapht-core-1.5.1.jar
