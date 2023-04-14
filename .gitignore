@@ -17,6 +17,7 @@ org.dnd/src/org/dnd/*
 !org.dnd/META-INF
 
 !org.dnd/src/org/dnd/POGL.xtext
+!org.dnd/src/org/dnd/GeneratePOGL.mwe2
 libs/*
 .metadata/
 
