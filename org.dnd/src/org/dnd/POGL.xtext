@@ -3,11 +3,19 @@ grammar org.dnd.POGL with org.eclipse.xtext.common.Terminals
 generate pOGL "http://www.dnd.org/POGL"
 
 Program:
-    (definitions+=Definition)*
+    (modules+=Module)*
+;
+
+Module:
+	module=(Adventure | Import)
+;
+
+Adventure:
+	'adventure' name=ID 'begin' (definitions+=Definition)* 'end'
 ;
 
 Definition:
-    definition=(State | Item | Action) 
+    State | Item | Action
 ;
 
 State:
@@ -18,9 +26,16 @@ Item:
     'item' name=ID ('set' value=INT)? ';'
 ;
 
-//TODO: Hidden actions or instruction to create actions
+FullyQualifiedState:
+	(adventure=[Adventure] '.')? state=[State]
+; 
+
+FullyQualifiedItem:
+	(adventure=[Adventure] '.')? item=[Item]
+; 
+
 Action:
-    'action' name=ID visibility=('hidden')? 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'end'
+    'action' name=ID visibility=('hidden')? 'in' state=FullyQualifiedState description=STRING 'do' (instructions+=Instruction)* 'endaction'
 ;
 
 Instruction:
@@ -28,7 +43,7 @@ Instruction:
 ;
 
 ItemManipulation:
-    item=[Item] operator=('add' | 'remove' | 'set') value=INT ';'
+    item=FullyQualifiedItem operator=('add' | 'remove' | 'set') value=INT ';'
 ;
 
 Check:
@@ -43,7 +58,7 @@ Expression:
 ;
 
 Term:
-	termInt=INT | termItem=[Item]
+	termInt=INT | termItem=FullyQualifiedItem
 ;
 
 ComparisonOperator:
@@ -59,5 +74,9 @@ ActionVisibilityChange:
 ;
 
 StateTransition:
-    'goto' state=[State] ';'
+    'goto' state=FullyQualifiedState ';'
+;
+
+Import:
+	'import' importURI=STRING ';'
 ;
