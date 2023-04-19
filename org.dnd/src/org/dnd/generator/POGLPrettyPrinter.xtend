@@ -16,29 +16,47 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
 	
 	override void generate(Resource input, IFileSystemAccess2 fsa) {
 		program = ""
+		
+		// Pretty-print imports
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Import)) {
+            program += e.visit
+        }
+        
+        // Pretty-print adventures
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Adventure)) {
+            program += e.visit
+        }
 				
-//		// Pretty-print states
-//		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.State)) {
-//            program += e.visit
-//        }
-//        
-//        program += "\n"
-//        
-//        // Pretty-print items
-//		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Item)) {
-//            program += e.visit
-//        }
-//        
-//        program += "\n"
-//        
-//        // Pretty-print actions
-//		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Action)) {
-//            program += e.visit + "\n"
-//        }
-//        
-//        // Generate output file
-//        fsa.generateFile('pretty_pogl.pogl', program)
+		// Pretty-print states
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.State)) {
+            program += e.visit
+        }
+        
+        program += "\n"
+        
+        // Pretty-print items
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Item)) {
+            program += e.visit
+        }
+        
+        program += "\n"
+        
+        // Pretty-print actions
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Action)) {
+            program += e.visit + "\n"
+        }
+        
+        // Generate output file
+        fsa.generateFile('pretty_pogl.pogl', program)
 	}
+	
+	private def dispatch visit(org.dnd.pOGL.Import importStatement) '''
+        import "«importStatement.importURI»";
+    '''
+    
+    private def dispatch visit(org.dnd.pOGL.Adventure adventure) '''
+        
+    '''
 	
 	private def dispatch visit(org.dnd.pOGL.State state) '''
         state «state.name» «state.optionalStateModifier» "«state.description»";
