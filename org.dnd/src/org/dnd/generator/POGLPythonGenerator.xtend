@@ -40,8 +40,8 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		        
 		        
 		def goto(to_state: State):
-		    # Placeholder
-		    pass
+		    game.current_state = to_state
+		    
 		    
 		    
 		def return_entities():
@@ -148,13 +148,14 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		                #print(self.displayed_actions[int(action_choice) - 1])
 		                is_legal = True 
 		            else: 
+		                os.system('cls')
 		                self.refreshDisplay()
 		                print('listen up bucko, please select a valid input')
 		                action_choice = input("Choose action: ")
 		
 		
 		    def refreshDisplay(self):
-		        os.system('cls')
+		        
 		        self.loadState()
 		        self.loadActions()
 		        self.loadItems() 
@@ -162,6 +163,7 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		
 		        
 		    def run(self):
+		        os.system('cls')
 		        game_state = True 
 		        while(game_state):
 		            self.promptUser()
