@@ -191,7 +191,7 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 	'''
 	
     private def dispatch visit(org.dnd.pOGL.ItemManipulation itemManipulation) '''
-    	«itemManipulation.item.name».«itemManipulation.operator»(«itemManipulation.value»)
+    	«itemManipulation.item.item.name».«itemManipulation.operator»(«itemManipulation.value»)
     '''
     
     private def dispatch visit(org.dnd.pOGL.MessageDisplay messageDisplay) '''
@@ -199,11 +199,11 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
     '''
     
     private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange) '''
-    	«actionVisibilityChange.action.state.name».actions["«actionVisibilityChange.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
+    	«actionVisibilityChange.action.state.state.name».actions["«actionVisibilityChange.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
     '''
     
     private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition) '''
-    	goto(«stateTransition.state.name»)
+    	goto(«stateTransition.state.state.name»)
     '''
 
     private def dispatch visit(org.dnd.pOGL.Expression expression) '''
@@ -215,7 +215,7 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
     	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_INT))
     		return term.termInt
     	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_ITEM))
-    		return term.termItem.name + ".quantity"
+    		return term.termItem.item.name + ".quantity"
     	return "0"
     }
 	
@@ -239,7 +239,7 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		def «action.name»():
 			«FOR instruction : action.instructions»«instruction.visit»«ENDFOR»
 		
-		«action.state.name».actions["«action.name»"] = {
+		«action.state.state.name».actions["«action.name»"] = {
 			    "description": "«action.description»",
 			    "is_hidden": «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»True«ELSE»False«ENDIF»,
 			    "function": «action.name»
