@@ -18,6 +18,7 @@ class POGLGenerator extends AbstractGenerator {
 
 	@Inject POGLPrettyPrinter prettyPrinter
 	@Inject POGLDummyGenerator dummyGenerator
+	@Inject POGLAdventurePrinter adventurePrinter
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		// Pretty-print
@@ -25,5 +26,11 @@ class POGLGenerator extends AbstractGenerator {
 		
 		// Dummy generation
 		dummyGenerator.generate(resource, fsa)
+		
+		// Python generator
+		// pythonGenerator.generate(resource, fsa)
+		
+		// Adventures printer
+		adventurePrinter.generate(resource, fsa)
 	}
 }
