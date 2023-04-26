@@ -43,35 +43,15 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		    game.current_state = to_state
 		    
 		    
-		    
-		def return_entities():
-			return states, items
-			
-		states = []
 		items = []
+		adventure_entities = {}
 		
 		'''
-				
-		// Define states
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.State)) {
+		// Define Adventures, with States and Items
+		for (e : input.resourceSet.allContents.toIterable.filter(org.dnd.pOGL.Adventure)) {
             program += e.visit
         }
         
-        //TODO Add all states and items to list
-        
-        program += "\n"
-        
-        // Define items
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Item)) {
-            program += e.visit
-        }
-        
-        program += "\n"
-        
-        // Define actions
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Action)) {
-            program += e.visit 
-        }
         program += "\n"
         
         // Combine States and Items for export
@@ -81,24 +61,34 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
         '''
 		class Game:
 		    def __init__(self):
-		        for i in states: 
-		            if i.modifier == "start":
-		                self.current_state = i
+		        self.current_adventure = None
+		        self.current_state = None
+		        self.start_adventures = []
+		        for adventure_name,adventure in adventure_entities.items():
+		            for state_name, state in adventure["states"].items(): 
+		                if state.modifier == "start":
+		                    self.start_adventures.append((adventure_name, state)) 
+		                    
+		                
+		
 		        self.displayed_actions = []
+		
 		    def loadState(self):
 		        size = os.get_terminal_size().columns
 		        difference = 0
 		        spaces = ""
 		        length = len(self.current_state.description)
+		        top_difference = (size - 7) // 2
+		        top_difference = top_difference * "*"
 		        if length < size - 4: 
 		            difference = (size - length - 4) // 2
 		            spaces = " " * difference
 		            print("\n")
-		            print("*" * size)
+		            print(top_difference + " Scene " + top_difference)
 		            print("* " + spaces + self.current_state.description + spaces + " *")
 		            print("*" * size)
 		        else: 
-		            print("*" * size)
+		            print(top_difference + " Scene " + top_difference)
 		            rows = length // (size - 4) + 1
 		            divisions_size = length // rows 
 		            difference = (size - divisions_size - 4) // 2
@@ -107,6 +97,26 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		                print("* " + spaces + self.current_state.description[i * divisions_size: (i + 1) * divisions_size] + spaces + " *")
 		                
 		            print("*" * size)
+		
+		    def loadMenu(self):
+		        print("\n")
+		        print("----------MENU----------")
+		        adventure_counter = 1
+		        for i in self.start_adventures:
+		            print(str(adventure_counter) + ') ' + i[0])
+		            adventure_counter += 1
+		        print("------------------------")
+		        print("\n")
+		        user_input = input("What adventure do you wanna play?: ")
+		        if int(user_input) > len(self.start_adventures) or int(user_input) < 1:
+		            print("Invalid input")
+		            time.sleep(2)
+		            os.system('cls')
+		            self.loadMenu()
+		        else:
+		            self.current_state = self.start_adventures[int(user_input) - 1][1]
+		            self.current_adventure = self.start_adventures[int(user_input) - 1]
+		            os.system('cls')
 		
 		                
 		    def loadActions(self): 
@@ -122,17 +132,20 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		                self.displayed_actions.append(self.current_state.actions[i]["function"])
 		                action_counter += 1	
 		        print("---------------------------")
+		
 		    def loadItems(self):
+		        temp_items = []
 		        print("\n")
 		        print("----------INVENTORY----------")
-		        for i in items:
-		            print(") " + i.name + ": " + str(i.quantity))
+		        for adventure in adventure_entities.values():
+		            for item in adventure["items"].values():
+		                if item.quantity > 0:
+		                    print(item.name + ": " + str(item.quantity))
+		                    temp_items.append(item)
+		        if len(temp_items) == 0:
+		            print("You have no items")
 		        print("-----------------------------")
 		        print("\n")
-		    def updateCurrentState(self):
-		         for i in states:
-		            if i.name == self.current_state.name:
-		                self.current_state == i
 		                
 		    def promptUser(self):
 		        is_legal = False
@@ -144,8 +157,6 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		                print('\n')
 		                self.displayed_actions[int(action_choice) - 1]()
 		                self.displayed_actions = []
-		                self.updateCurrentState()
-		                #print(self.displayed_actions[int(action_choice) - 1])
 		                is_legal = True 
 		            else: 
 		                os.system('cls')
@@ -160,10 +171,11 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		        self.loadActions()
 		        self.loadItems() 
 		                    
-		
+		#add states and items to 
 		        
 		    def run(self):
 		        os.system('cls')
+		        self.loadMenu()
 		        game_state = True 
 		        while(game_state):
 		            self.promptUser()
@@ -174,72 +186,99 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		                
 		game = Game()
 		game.run()
+
         '''
         
         // Generate output file
         fsa.generateFile('python_pogl.py', program)
 	}
+	private def dispatch visit(org.dnd.pOGL.Adventure adventure)'''
+		adventure_entities["«adventure.name»"] = {"states": {}, "items": {}}
+		«FOR definition : adventure.definitions.reject(org.dnd.pOGL.Action)»
+		adventure_entities["«adventure.name»"][«definition.visit»
+		«ENDFOR»
+		
+		«FOR definition : adventure.definitions.filter(org.dnd.pOGL.Action)»
+		«visit(definition, adventure.name)»
+		«ENDFOR»
+		
+		
+	'''
+	
 
 	private def dispatch visit(org.dnd.pOGL.State state)'''
-		«state.name» = State("«state.name»", "«state.description»"«IF state.optionalStateModifier !== null», "«state.optionalStateModifier»"«ENDIF»)
-		states.append(«state.name»)
+		"states"]["«state.name»"] = (State("«state.name»", "«state.description»"«IF state.optionalStateModifier !== null», "«state.optionalStateModifier»"«ENDIF»))
 	'''
 	
 	private def dispatch visit(org.dnd.pOGL.Item item)'''
-		«item.name» = Item ("«item.name»"«IF item.eIsSet(POGLPackage.Literals.ITEM__VALUE)», «item.value»«ENDIF»)
-		items.append(«item.name»)
+		"items"]["«item.name»"] = (Item("«item.name»"«IF item.eIsSet(POGLPackage.Literals.ITEM__VALUE)», «item.value»«ENDIF»))
 	'''
 	
-    private def dispatch visit(org.dnd.pOGL.ItemManipulation itemManipulation) '''
-    	«itemManipulation.item.item.name».«itemManipulation.operator»(«itemManipulation.value»)
+    private def dispatch visit(org.dnd.pOGL.ItemManipulation itemManipulation, String adventure_name) '''
+    	«IF itemManipulation.item.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ITEM__ADVENTURE)»
+    	adventure_entities["«itemManipulation.item.adventure.name»"]['items']["«itemManipulation.item.item.name»"].«itemManipulation.operator»(«itemManipulation.value»)
+		«ELSE»
+    	adventure_entities["«adventure_name»"]['items']["«itemManipulation.item.item.name»"].«itemManipulation.operator»(«itemManipulation.value»)
+		«ENDIF»
+    	
     '''
     
-    private def dispatch visit(org.dnd.pOGL.MessageDisplay messageDisplay) '''
-    	print("«messageDisplay.message»")
+    private def dispatch visit(org.dnd.pOGL.MessageDisplay messageDisplay, String adventure_name) '''
+    	print("ATTENTION: ")
+    	print("+ " + "«messageDisplay.message»" + " +")
+    	print("\n")
     '''
     
-    private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange) '''
-    	«actionVisibilityChange.action.state.state.name».actions["«actionVisibilityChange.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
+    private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange, String adventure_name) '''
+    	adventure_entities["«adventure_name»"]['states']["«actionVisibilityChange.action.state.state.name»"].actions["«actionVisibilityChange.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
     '''
     
-    private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition) '''
-    	goto(«stateTransition.state.state.name»)
+    private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition, String adventure_name) '''
+    	«IF stateTransition.state.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_STATE__ADVENTURE)»
+    	goto(adventure_entities["«stateTransition.state.adventure.name»"]['states']["«stateTransition.state.state.name»"])
+		«ELSE»
+    	goto(adventure_entities["«adventure_name»"]['states']["«stateTransition.state.state.name»"])
+		«ENDIF»
     '''
 
-    private def dispatch visit(org.dnd.pOGL.Expression expression) '''
-        «expression.left.visit» «expression.operator» «expression.right.visit»'''
+    private def dispatch visit(org.dnd.pOGL.Expression expression, String adventure_name) '''
+        «visit(expression.left, adventure_name)» «expression.operator» «visit(expression.right, adventure_name)»'''
 	//TODO Transform '=' to '=='
 	
 	
-	private def dispatch visit(org.dnd.pOGL.Term term) {
+	private def dispatch visit(org.dnd.pOGL.Term term, String adventure_name) {
     	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_INT))
     		return term.termInt
-    	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_ITEM))
-    		return term.termItem.item.name + ".quantity"
-    	return "0"
+    	else if (term.eIsSet(POGLPackage.Literals.TERM__TERM_ITEM))
+			if(term.termItem.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ITEM__ADVENTURE))
+    			return "adventure_entities['" + term.termItem.adventure.name + "']['items']['" + term.termItem.item.name + "'].quantity"
+			else
+				return "adventure_entities['" + adventure_name + "']['items']['" + term.termItem.item.name + "'].quantity"
+    	else
+    		return "0"
     }
 	
 	
-    private def dispatch visit(org.dnd.pOGL.Check check) {
-		var content = "if " + check.expression.visit;
+    private def dispatch visit(org.dnd.pOGL.Check check, String adventure_name) {
+		var content = "if " + visit(check.expression, adventure_name);
 		for (expression : check.andExpressions) {
-			content += " and " + expression.visit 
+			content += " and " + visit(expression, adventure_name) 
 		}
 		return content + ":\n" + '''
-	        	«FOR instruction : check.instructionsIfTrue»«instruction.visit»«ENDFOR»
+	        	«FOR instruction : check.instructionsIfTrue»«visit(instruction, adventure_name)»«ENDFOR»
 	        «IF check.eIsSet(POGLPackage.Literals.CHECK__INSTRUCTIONS_IF_FALSE)»
 	        else:
-	        	«FOR instruction : check.instructionsIfFalse»«instruction.visit»«ENDFOR»
+	        	«FOR instruction : check.instructionsIfFalse»«visit(instruction, adventure_name)»«ENDFOR»
 	        «ENDIF»
 		'''
 		
 		}
 	
-	private def dispatch visit(org.dnd.pOGL.Action action) '''
+	private def dispatch visit(org.dnd.pOGL.Action action, String adventure_name) '''
 		def «action.name»():
-			«FOR instruction : action.instructions»«instruction.visit»«ENDFOR»
+			«FOR instruction : action.instructions»«visit(instruction, adventure_name)»«ENDFOR»
 		
-		«action.state.state.name».actions["«action.name»"] = {
+		adventure_entities["«adventure_name»"]['states']["«action.state.state.name»"].actions["«action.name»"] ={
 			    "description": "«action.description»",
 			    "is_hidden": «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»True«ELSE»False«ENDIF»,
 			    "function": «action.name»
