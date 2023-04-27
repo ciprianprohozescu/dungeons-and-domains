@@ -26,6 +26,10 @@ Item:
     'item' name=ID ('set' value=INT)? ';'
 ;
 
+Action:
+    'action' name=ID visibility=('hidden')? 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'endaction'
+;
+
 FullyQualifiedState:
 	(adventure=[Adventure] '.')? state=[State]
 ; 
@@ -34,9 +38,9 @@ FullyQualifiedItem:
 	(adventure=[Adventure] '.')? item=[Item]
 ; 
 
-Action:
-    'action' name=ID visibility=('hidden')? 'in' state=FullyQualifiedState description=STRING 'do' (instructions+=Instruction)* 'endaction'
-;
+FullyQualifiedAction:
+	(adventure=[Adventure] '.')? action=[Action]
+; 
 
 Instruction:
     ItemManipulation | Check | MessageDisplay | ActionVisibilityChange | StateTransition
@@ -70,7 +74,7 @@ MessageDisplay:
 ;
 
 ActionVisibilityChange:
-	verb=('reveal' | 'hide') action=[Action] ';'
+	verb=('reveal' | 'hide') action=FullyQualifiedAction ';'
 ;
 
 StateTransition:

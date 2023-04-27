@@ -57,7 +57,7 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     '''
     
     private def dispatch visit(org.dnd.pOGL.Action action) '''
-        action «action.name» «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»«action.visibility»«ENDIF» in «printFullyQualifiedState(action.state)» "«action.description»" do
+        action «action.name» «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»«action.visibility»«ENDIF» in «action.state.name» "«action.description»" do
         	«FOR instruction : action.instructions»«instruction.visit»«ENDFOR»
         endaction
     '''
@@ -99,7 +99,7 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     '''
     
     private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange) '''
-        «actionVisibilityChange.verb» «actionVisibilityChange.action.name»;
+        «actionVisibilityChange.verb» «printFullyQualifiedAction(actionVisibilityChange.action)»;
     '''
     
     private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition) '''
@@ -122,6 +122,16 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     		content += fullyQualifiedItem.adventure.name + ".";
     	}
     	content += fullyQualifiedItem.item.name;
+    	
+    	return content;
+    }
+    
+    private def printFullyQualifiedAction(org.dnd.pOGL.FullyQualifiedAction fullyQualifiedAction) {
+    	content = "";
+    	if (fullyQualifiedAction.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ACTION__ADVENTURE)) {
+    		content += fullyQualifiedAction.adventure.name + ".";
+    	}
+    	content += fullyQualifiedAction.action.name;
     	
     	return content;
     }

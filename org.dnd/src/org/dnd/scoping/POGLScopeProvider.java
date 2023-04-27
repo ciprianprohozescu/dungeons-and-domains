@@ -10,6 +10,7 @@ import org.eclipse.xtext.scoping.Scopes;
 import org.dnd.pOGL.POGLPackage;
 import org.dnd.pOGL.FullyQualifiedState;
 import org.dnd.pOGL.FullyQualifiedItem;
+import org.dnd.pOGL.FullyQualifiedAction;
 import org.dnd.pOGL.Adventure;
 
 /**
@@ -34,6 +35,14 @@ public class POGLScopeProvider extends AbstractPOGLScopeProvider {
 			FullyQualifiedItem fullyQualifiedItem = (FullyQualifiedItem) context;
 			if (fullyQualifiedItem.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ITEM__ADVENTURE)) {
 				Adventure adventure = fullyQualifiedItem.getAdventure();
+				return Scopes.scopeFor(adventure.getDefinitions());
+			}
+		}
+		
+		if (reference == POGLPackage.Literals.FULLY_QUALIFIED_ACTION__ACTION) {
+			FullyQualifiedAction fullyQualifiedAction = (FullyQualifiedAction) context;
+			if (fullyQualifiedAction.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ACTION__ADVENTURE)) {
+				Adventure adventure = fullyQualifiedAction.getAdventure();
 				return Scopes.scopeFor(adventure.getDefinitions());
 			}
 		}
