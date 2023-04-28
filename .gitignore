@@ -14,10 +14,12 @@ org.dnd/src/org/*
 org.dnd/src/org/dnd/*
 !org.dnd/src/org/dnd/validation
 !org.dnd/src/org/dnd/generator
+!org.dnd/src/org/dnd/scoping
 !org.dnd/META-INF
 
 !org.dnd/src/org/dnd/POGL.xtext
 !org.dnd/src/org/dnd/GeneratePOGL.mwe2
+!org.dnd/src/org/dnd/POGLRuntimeModule.java
 libs/*
 .metadata/
 

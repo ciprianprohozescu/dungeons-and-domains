@@ -11,34 +11,42 @@ import org.dnd.pOGL.POGLPackage
  * Pretty-prints POGL programs.
  */
 class POGLPrettyPrinter implements POGLAbstractGenerator {
+	
+	String filename
 
 	String program
 	
+	String content
+	
 	override void generate(Resource input, IFileSystemAccess2 fsa) {
+		filename = input.URI.path.substring(input.URI.path.lastIndexOf('/') + 1);
 		program = ""
-				
-		// Pretty-print states
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.State)) {
+		
+		// Pretty-print imports
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Import)) {
             program += e.visit
         }
         
-        program += "\n"
-        
-        // Pretty-print items
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Item)) {
+        // Pretty-print adventures
+		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Adventure)) {
             program += e.visit
         }
         
-        program += "\n"
-        
-        // Pretty-print actions
-		for (e : input.allContents.toIterable.filter(org.dnd.pOGL.Action)) {
-            program += e.visit + "\n"
-        }
+        System.out.println(input.URI);
         
         // Generate output file
-        fsa.generateFile('pretty_pogl.pogl', program)
+        fsa.generateFile(filename, program)
 	}
+	
+	private def dispatch visit(org.dnd.pOGL.Import importStatement) '''
+        import "«importStatement.importURI»";
+    '''
+    
+    private def dispatch visit(org.dnd.pOGL.Adventure adventure) '''
+    adventure «adventure.name» begin
+    	«FOR definition : adventure.definitions»«definition.visit»«ENDFOR»
+    end
+    '''
 	
 	private def dispatch visit(org.dnd.pOGL.State state) '''
         state «state.name» «state.optionalStateModifier» "«state.description»";
@@ -51,11 +59,11 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     private def dispatch visit(org.dnd.pOGL.Action action) '''
         action «action.name» «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»«action.visibility»«ENDIF» in «action.state.name» "«action.description»" do
         	«FOR instruction : action.instructions»«instruction.visit»«ENDFOR»
-        end
+        endaction
     '''
     
     private def dispatch visit(org.dnd.pOGL.ItemManipulation itemManipulation) '''
-        «itemManipulation.item.name» «itemManipulation.operator» «itemManipulation.value»;
+        «printFullyQualifiedItem(itemManipulation.item)» «itemManipulation.operator» «itemManipulation.value»;
     '''
     
     private def dispatch visit(org.dnd.pOGL.Check check) {
@@ -81,7 +89,7 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_INT))
     		return term.termInt
     	if (term.eIsSet(POGLPackage.Literals.TERM__TERM_ITEM))
-    		return term.termItem.name
+    		return printFullyQualifiedItem(term.termItem)
     	return "0"
     }
     
@@ -91,10 +99,40 @@ class POGLPrettyPrinter implements POGLAbstractGenerator {
     '''
     
     private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange) '''
-        «actionVisibilityChange.verb» «actionVisibilityChange.action.name»;
+        «actionVisibilityChange.verb» «printFullyQualifiedAction(actionVisibilityChange.action)»;
     '''
     
     private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition) '''
-        goto «stateTransition.state.name»;
+        goto «printFullyQualifiedState(stateTransition.state)»;
     '''
+    
+    private def printFullyQualifiedState(org.dnd.pOGL.FullyQualifiedState fullyQualifiedState) {
+    	content = "";
+    	if (fullyQualifiedState.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_STATE__ADVENTURE)) {
+    		content += fullyQualifiedState.adventure.name + ".";
+    	}
+    	content += fullyQualifiedState.state.name;
+    	
+    	return content;
+    }
+    
+    private def printFullyQualifiedItem(org.dnd.pOGL.FullyQualifiedItem fullyQualifiedItem) {
+    	content = "";
+    	if (fullyQualifiedItem.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ITEM__ADVENTURE)) {
+    		content += fullyQualifiedItem.adventure.name + ".";
+    	}
+    	content += fullyQualifiedItem.item.name;
+    	
+    	return content;
+    }
+    
+    private def printFullyQualifiedAction(org.dnd.pOGL.FullyQualifiedAction fullyQualifiedAction) {
+    	content = "";
+    	if (fullyQualifiedAction.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ACTION__ADVENTURE)) {
+    		content += fullyQualifiedAction.adventure.name + ".";
+    	}
+    	content += fullyQualifiedAction.action.name;
+    	
+    	return content;
+    }
 }

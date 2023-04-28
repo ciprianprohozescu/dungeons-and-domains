@@ -3,11 +3,19 @@ grammar org.dnd.POGL with org.eclipse.xtext.common.Terminals
 generate pOGL "http://www.dnd.org/POGL"
 
 Program:
-    (definitions+=Definition)*
+    (modules+=Module)*
+;
+
+Module:
+	module=(Adventure | Import) 
+;
+
+Adventure:
+	'adventure' name=ID 'begin' (definitions+=Definition)* 'end'
 ;
 
 Definition:
-    definition=(State | Item | Action) 
+    State | Item | Action
 ;
 
 State:
@@ -18,22 +26,33 @@ Item:
     'item' name=ID ('set' value=INT)? ';'
 ;
 
-//TODO: Hidden actions or instruction to create actions
 Action:
-    'action' name=ID visibility=('hidden')? 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'end'
+    'action' name=ID visibility=('hidden')? 'in' state=[State] description=STRING 'do' (instructions+=Instruction)* 'endaction'
 ;
+
+FullyQualifiedState:
+	(adventure=[Adventure] '.')? state=[State]
+; 
+
+FullyQualifiedItem:
+	(adventure=[Adventure] '.')? item=[Item]
+; 
+
+FullyQualifiedAction:
+	(adventure=[Adventure] '.')? action=[Action]
+; 
 
 Instruction:
     ItemManipulation | Check | MessageDisplay | ActionVisibilityChange | StateTransition
 ;
 
 ItemManipulation:
-    item=[Item] operator=('add' | 'remove' | 'set') value=INT ';'
+    item=FullyQualifiedItem operator=('add' | 'remove' | 'set') value=INT ';'
 ;
 
 Check:
     'check' expression=Expression ('and' andExpressions+=Expression)*
-    'then' (instructionsIfTrue+=Instruction)* 
+    'then' (instructionsIfTrue+=Instruction)+ 
     ('else' (instructionsIfFalse+=Instruction)*)?
     'endcheck'
 ;
@@ -43,7 +62,7 @@ Expression:
 ;
 
 Term:
-	termInt=INT | termItem=[Item]
+	termInt=INT | termItem=FullyQualifiedItem
 ;
 
 ComparisonOperator:
@@ -55,9 +74,13 @@ MessageDisplay:
 ;
 
 ActionVisibilityChange:
-	verb=('reveal' | 'hide') action=[Action] ';'
+	verb=('reveal' | 'hide') action=FullyQualifiedAction ';'
 ;
 
 StateTransition:
-    'goto' state=[State] ';'
+    'goto' state=FullyQualifiedState ';'
+;
+
+Import:
+	'import' importURI=STRING ';'
 ;
