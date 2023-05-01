@@ -174,14 +174,19 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		        
 		    def run(self):
 		        os.system('cls')
-		        self.loadMenu()
-		        game_state = True 
-		        while(game_state):
-		            self.promptUser()
-		            if self.current_state.modifier == "final":
-		                self.loadState()
-		                game_state = False
-		                print("THE GAME HAS ENDED")
+		        if len(self.start_adventures) == 0:
+		       		print("Hello there traveler,there seem to be no starting states in this adventure")
+		        	print("press any key to exit")
+		        	input()
+		        else:
+			        self.loadMenu()
+			        game_state = True 
+			        while(game_state):
+			            self.promptUser()
+			            if self.current_state.modifier == "final":
+			                self.loadState()
+			                game_state = False
+			                print("THE GAME HAS ENDED")
 		                
 		game = Game()
 		game.run()
