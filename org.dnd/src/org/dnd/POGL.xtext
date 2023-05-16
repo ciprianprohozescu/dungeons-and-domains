@@ -2,6 +2,8 @@ grammar org.dnd.POGL with org.eclipse.xtext.common.Terminals
 
 generate pOGL "http://www.dnd.org/POGL"
 
+
+
 Program:
     (modules+=Module)*
 ;
@@ -58,16 +60,14 @@ Check:
 ;
 
 Expression:
-	left=Term operator=ComparisonOperator right=Term
+	left=Term operator=COMPARISON_OPERATOR right=Term
 ;
 
 Term:
 	termInt=INT | termItem=FullyQualifiedItem
 ;
 
-ComparisonOperator:
-    '>' | '<' | '=' | '!=' | '>=' | '<='
-;
+
 
 MessageDisplay:
     'show' message=STRING ';'
@@ -84,3 +84,6 @@ StateTransition:
 Import:
 	'import' importURI=STRING ';'
 ;
+
+terminal COMPARISON_OPERATOR : ('>' | '<' | '=' | '!=' | '>=' | '<=');
+
