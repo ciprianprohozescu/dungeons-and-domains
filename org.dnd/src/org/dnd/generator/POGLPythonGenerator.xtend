@@ -43,7 +43,6 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		    game.current_state = to_state
 		    
 		    
-		items = []
 		adventure_entities = {}
 		
 		'''
