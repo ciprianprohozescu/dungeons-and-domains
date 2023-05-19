@@ -43,7 +43,6 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		    game.current_state = to_state
 		    
 		    
-		items = []
 		adventure_entities = {}
 		
 		'''
@@ -175,14 +174,19 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		        
 		    def run(self):
 		        os.system('cls')
-		        self.loadMenu()
-		        game_state = True 
-		        while(game_state):
-		            self.promptUser()
-		            if self.current_state.modifier == "final":
-		                self.loadState()
-		                game_state = False
-		                print("THE GAME HAS ENDED")
+		        if len(self.start_adventures) == 0:
+		       		print("Hello there traveler,there seem to be no starting states in this adventure")
+		        	print("press any key to exit")
+		        	input()
+		        else:
+			        self.loadMenu()
+			        game_state = True 
+			        while(game_state):
+			            self.promptUser()
+			            if self.current_state.modifier == "final":
+			                self.loadState()
+			                game_state = False
+			                print("THE GAME HAS ENDED")
 		                
 		game = Game()
 		game.run()
@@ -230,7 +234,11 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
     '''
     
     private def dispatch visit(org.dnd.pOGL.ActionVisibilityChange actionVisibilityChange, String adventure_name) '''
-    	adventure_entities["«adventure_name»"]['states']["«actionVisibilityChange.action.state.state.name»"].actions["«actionVisibilityChange.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
+    	«IF actionVisibilityChange.action.eIsSet(POGLPackage.Literals.FULLY_QUALIFIED_ACTION__ADVENTURE)»
+    	adventure_entities["«actionVisibilityChange.action.adventure.name»"]['states']["«actionVisibilityChange.action.action.state.name»"].actions["«actionVisibilityChange.action.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
+    	«ELSE»
+    	adventure_entities["«adventure_name»"]['states']["«actionVisibilityChange.action.action.state.name»"].actions["«actionVisibilityChange.action.action.name»"]["is_hidden"] = «IF actionVisibilityChange.verb == 'reveal'»False«ELSE»True«ENDIF»
+    	«ENDIF»
     '''
     
     private def dispatch visit(org.dnd.pOGL.StateTransition stateTransition, String adventure_name) '''
@@ -278,7 +286,7 @@ class POGLPythonGenerator implements POGLAbstractGenerator {
 		def «action.name»():
 			«FOR instruction : action.instructions»«visit(instruction, adventure_name)»«ENDFOR»
 		
-		adventure_entities["«adventure_name»"]['states']["«action.state.state.name»"].actions["«action.name»"] ={
+		adventure_entities["«adventure_name»"]['states']["«action.state.name»"].actions["«action.name»"] ={
 			    "description": "«action.description»",
 			    "is_hidden": «IF action.eIsSet(POGLPackage.Literals.ACTION__VISIBILITY)»True«ELSE»False«ENDIF»,
 			    "function": «action.name»
