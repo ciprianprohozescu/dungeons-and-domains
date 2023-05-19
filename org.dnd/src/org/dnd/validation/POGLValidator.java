@@ -9,6 +9,7 @@ import java.util.Set;
 import org.dnd.pOGL.Action;
 import org.dnd.pOGL.Adventure;
 import org.dnd.pOGL.Definition;
+import org.dnd.pOGL.Expression;
 import org.dnd.pOGL.Import;
 import org.dnd.pOGL.Instruction;
 import org.dnd.pOGL.Item;
@@ -39,11 +40,19 @@ public class POGLValidator extends AbstractPOGLValidator {
 	@Check
 	public void checkAdventure(Program program) {
 	    Map<String, String> adventureNames = new HashMap<String, String>();
-	    collectAdventureNames(program, adventureNames);
+	    Set<String> visitedFiles = new HashSet<>();
+	    collectAdventureNames(program, adventureNames, visitedFiles);
 	}
 
-	private void collectAdventureNames(Program program, Map<String, String> adventureNames) {
+	private void collectAdventureNames(Program program, Map<String, String> adventureNames, Set<String> visitedFiles) {
 		String currentProgramPath = program.eResource().getURI().toPlatformString(true);
+	    String currentFilePath = Paths.get(currentProgramPath).toString();
+	   
+	    if (visitedFiles.contains(currentFilePath)) {
+	        return;
+	    }
+	    
+	    visitedFiles.add(currentFilePath);
 	    for (Module module : program.getModules()) {
 	        if (module.getModule() instanceof Adventure) {
 	            Adventure adventure = (Adventure) module.getModule();
@@ -63,7 +72,7 @@ public class POGLValidator extends AbstractPOGLValidator {
 	            	URI importPlatformURI = URI.createPlatformResourceURI(folderPath + "/" + importUri, true);
 	                Resource importedResource = importModule.eResource().getResourceSet().getResource(importPlatformURI, true);
 	                Program importedProgram = (Program) importedResource.getContents().get(0);
-	                collectAdventureNames(importedProgram, adventureNames);
+	                collectAdventureNames(importedProgram, adventureNames, visitedFiles);
 	            }
 	        }
 	    }
@@ -128,5 +137,4 @@ public class POGLValidator extends AbstractPOGLValidator {
   			}
   		}	
 	}
-	
 }
