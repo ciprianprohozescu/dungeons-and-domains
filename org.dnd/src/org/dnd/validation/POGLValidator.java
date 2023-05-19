@@ -10,11 +10,13 @@ import org.dnd.pOGL.Action;
 import org.dnd.pOGL.Adventure;
 import org.dnd.pOGL.Definition;
 import org.dnd.pOGL.Expression;
+import org.dnd.pOGL.FullyQualifiedItem;
 import org.dnd.pOGL.Import;
 import org.dnd.pOGL.Instruction;
 import org.dnd.pOGL.Item;
 import org.dnd.pOGL.ItemManipulation;
 import org.dnd.pOGL.Program;
+import org.dnd.pOGL.Term;
 import org.dnd.pOGL.Module;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -100,41 +102,71 @@ public class POGLValidator extends AbstractPOGLValidator {
 		}
 	}
 	
+	private void checkInsideExpression(Expression expression, Set<Item> usedVariables) {
+	    Term leftTerm = expression.getLeft();
+	    Term rightTerm = expression.getRight();
+
+	    if (leftTerm.getTermItem() instanceof FullyQualifiedItem) {
+	        Item item = (Item) leftTerm.getTermItem().getItem();
+	        usedVariables.add(item);
+	    }
+
+	    if (rightTerm.getTermItem() instanceof FullyQualifiedItem) {
+	        Item item = (Item) rightTerm.getTermItem().getItem();
+	        usedVariables.add(item);
+	    }
+	}
+	
+	private void collectUsedVariables(Instruction instruction, Set<Item> usedVariables) {
+	    if (instruction instanceof ItemManipulation) {
+	        ItemManipulation itemManipulation = (ItemManipulation) instruction;
+	        Item item = itemManipulation.getItem().getItem();
+	        usedVariables.add(item);
+	    } else if (instruction instanceof org.dnd.pOGL.Check) {
+	        org.dnd.pOGL.Check check = (org.dnd.pOGL.Check) instruction;
+	        Expression expr = check.getExpression();
+	        checkInsideExpression(expr, usedVariables);
+	        for (Expression andExpression : check.getAndExpressions()) {
+	            checkInsideExpression(andExpression, usedVariables);
+	        }
+	        for (Instruction instr : check.getInstructionsIfTrue()) {
+	            collectUsedVariables(instr, usedVariables);
+	        }
+	        for (Instruction instr : check.getInstructionsIfFalse()) {
+	            collectUsedVariables(instr, usedVariables);
+	        }
+	    }
+	}
+
 	@Check
 	public void checkUnusedVariables(Program program) {
-  		for (Module module : program.getModules()) {
-  			if (module.getModule() instanceof Adventure) {
-  				Set<EObject> assignedVariables = new HashSet<>();
-  		  		Set<EObject> usedVariables = new HashSet<>();
-  		  		Adventure adventure = (Adventure) module.getModule();
-  		  		for (Definition def : adventure.getDefinitions()) {
-    				if (def instanceof Item) {
-    					Item item = (Item) def;
-     					assignedVariables.add(item);
-    				}
-     			}
-  		  		
-	  		  	for (Definition def : adventure.getDefinitions()) {
-	 				if (def instanceof Action) {
-	  					Action action = (Action) def;
-	  					for (Instruction instr : action.getInstructions()) {
-	  	                    if (instr instanceof ItemManipulation) {
-	  	                    	ItemManipulation itemManipulation = (ItemManipulation) instr;
-	  	                    	Item item = (Item) itemManipulation.getItem().getItem();
-	  	                    	usedVariables.add(item);
-	  	                    }
-	  	                }
-	  				}
-	  			}
-  			
-	  			assignedVariables.removeAll(usedVariables);
-	  			for (EObject unusedVariable : assignedVariables) {
-	  				if (unusedVariable instanceof Item) {
-	 					Item item = (Item) unusedVariable;
-	  					warning("Unused item: " + item.getName(), item, null, ValidationMessageAcceptor.INSIGNIFICANT_INDEX);
-	  				}
-	  			}
-  			}
-  		}	
+	    for (Module module : program.getModules()) {
+	        if (module.getModule() instanceof Adventure) {
+	            Adventure adventure = (Adventure) module.getModule();
+	            Set<Item> assignedVariables = new HashSet<>();
+	            Set<Item> usedVariables = new HashSet<>();
+
+	            for (Definition def : adventure.getDefinitions()) {
+	                if (def instanceof Item) {
+	                    Item item = (Item) def;
+	                    assignedVariables.add(item);
+	                }
+	            }
+
+	            for (Definition def : adventure.getDefinitions()) {
+	                if (def instanceof Action) {
+	                    Action action = (Action) def;
+	                    for (Instruction instr : action.getInstructions()) {
+	                        collectUsedVariables(instr, usedVariables);
+	                    }
+	                }
+	            }
+
+	            assignedVariables.removeAll(usedVariables);
+	            for (Item unusedVariable : assignedVariables) {
+	                warning("Unused item: " + unusedVariable.getName(), unusedVariable, null, ValidationMessageAcceptor.INSIGNIFICANT_INDEX);
+	            }
+	        }
+	    }
 	}
 }
